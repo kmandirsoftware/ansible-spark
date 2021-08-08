@@ -1,0 +1,20 @@
+---
+- hosts: servers
+  user: ubuntu
+  vars:
+   download_url: https://apache.claz.org/spark/spark-3.1.2/spark-3.1.2-bin-hadoop3.2.tgz
+  
+  tasks:
+          #  - name: Download Spark
+          #   command: "wget --no-check-certificate --no-cookies {{download_url}} "
+    #- name: Install Spark
+    #   command: "tar -zxvf spark-3.1.2-bin-hadoop3.2.tgz"
+  # lineinfile is used to add additional or append lines to existing files.
+   -name: add lines
+    lineinfile:
+     path: /home/ubuntu/.bashrc
+     state: present
+     line: "{{ item }}"
+   with_items:
+      - 'PATH=${SPARK_HOME}/bin:${PATH}'
+      - 'SPARK_HOME=/opt/spark'

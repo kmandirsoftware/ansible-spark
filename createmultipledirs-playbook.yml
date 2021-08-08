@@ -1,0 +1,10 @@
+---
+- hosts: servers
+  become: true
+  tasks:
+  - name: Create multiple directories
+  file: path={{item}} state=directory
+  with_items:
+  - '/home/ubuntu/vn1'
+  - '/home/ubuntu/vn2'
+  - '/home/ubuntu/vn3'

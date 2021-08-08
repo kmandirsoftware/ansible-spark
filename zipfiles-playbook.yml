@@ -1,0 +1,10 @@
+---
+- hosts: servers
+  become: true
+  tasks:
+  - name: Ansible zip file example
+    archive:
+     path: /home/ubuntu/niranjan.txt
+     dest: /home/ubuntu/niranjan.zip
+     format: zip
+

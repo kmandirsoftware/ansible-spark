@@ -1,0 +1,52 @@
+---
+- hosts: servers
+  user: ubuntu
+  become: yes
+  
+  tasks:
+    - lineinfile:
+       path: /home/ubuntu/.bashrc
+       line: 'SPARK_HOME=/opt/spark'
+    - lineinfile:
+       path: /home/ubuntu/.bashrc
+       line: 'PATH=$SPARK_HOME/bin:$PATH'
+    - name: Run the equivalent of "apt-get update" as a separate step
+      apt:
+        update_cache: yes
+    - name: Install java
+      apt:
+        name: default-jre
+        state: present
+    - name: Install Spark
+      unarchive:
+        src: downloads/spark-3.1.2-bin-hadoop3.2.tgz
+        dest: /opt
+    - name: Create symbolic link
+      file:
+         src: /opt/spark-3.1.2-bin-hadoop3.2
+         dest: /opt/spark
+         owner: ubuntu
+         group: ubuntu
+         state: link
+    - name: copy conf file
+      copy:
+        src: /opt/spark/conf/spark-defaults.conf.template
+        dest: /opt/spark/conf/spark-defaults.conf
+        owner: ubuntu
+        group: ubuntu
+        remote_src: yes
+    - name: add config for sparkmaster
+      lineinfile:
+        path: /opt/spark/conf/spark-defaults.conf
+        line: 'spark.master    spark://sparkmaster:7077'
+    - name: copy env file
+      copy:
+        src: /opt/spark/conf/spark-env.sh.template
+        dest: /opt/spark/conf/spark-env.sh
+        owner: ubuntu
+        group: ubuntu
+        remote_src: yes
+    - name: add config for sparkmaster
+      lineinfile:
+        path: /opt/spark/conf/spark-env.sh
+        line: 'SPARK_MASTER_IP=sparkmaster'

@@ -1,0 +1,5 @@
+- hosts: servers
+  become: true
+  tasks:
+  - name: Create a file
+    file: path=/home/ubuntu/niranjan.txt state=touch

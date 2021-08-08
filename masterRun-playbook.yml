@@ -1,0 +1,9 @@
+--- 
+- name: Start Master
+  user: ubuntu
+  hosts: mastert1
+  become: yes
+
+  tasks:
+          - name: Run Master Start Command
+            command: /opt/spark/sbin/start-master.sh
